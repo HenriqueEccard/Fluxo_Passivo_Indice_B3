@@ -66,14 +66,23 @@ if __name__ == '__main__':
                 .rename(columns={"Quantidade": "compras"})
             )
            
-            
+            #Define COMPRADOR PASSIVO - ABOSORÇÃO DA VENDA
             passivos_compra = df_comprador.groupby("Compradora")[["Quantidade"]].sum()
             passivos_compra = passivos_compra[passivos_compra["Quantidade"] > 818]
-
             df_final = saldo_compras_alto.merge(passivos_compra, left_index=True, right_index=True, how="inner")
-
             for idx, row in df_final.iterrows():
                 print(f"Player: {idx} | Saldo: {row['saldo']} | Lotes Comprados: {row['Quantidade']}")
+
+            #Define COMPRADOR PASSIVO - ABOSORÇÃO DA VENDA
+            passivos_venda = df_vendedor.groupby("Vendedora")[["Quantidade"]].sum()
+            passivos_venda = passivos_venda[passivos_venda["Quantidade"] > 500]
+            df_final = saldo_vendas_alto.merge(passivos_venda, left_index=True, right_index=True, how="inner")
+            for idx, row in df_final.iterrows():
+                print(f"Player: {idx} | Saldo: {row['saldo']} | Lotes Vendidos: {row['Quantidade']}")
+
+
+
+
 
 
            # print (resultado_compras)         
