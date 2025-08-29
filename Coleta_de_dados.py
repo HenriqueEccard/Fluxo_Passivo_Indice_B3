@@ -49,8 +49,8 @@ if __name__ == '__main__':
             saldo_vendas_alto = saldo[saldo["saldo"] < -100]
             
             # SEPARO OS AGRESSORES POR CATEGORIAS COMPRADOR OU AGRESSOR
-            df_comprador = df[df["Agressor"] == "Comprador"]
-            df_vendedor = df[df["Agressor"] == "Vendedor"]
+            df_comprador = df[df["Agressor"] == "Vendedor"]
+            df_vendedor = df[df["Agressor"] == "Comprador"]
 
             # FILTRANDO APENAS OS PASSIVOS DE VENDA
             resultado_vendas = (
@@ -66,7 +66,17 @@ if __name__ == '__main__':
                 .rename(columns={"Quantidade": "compras"})
             )
            
-            print (resultado_compras)         
+            
+            passivos_compra = df_comprador.groupby("Compradora")[["Quantidade"]].sum()
+            passivos_compra = passivos_compra[passivos_compra["Quantidade"] > 818]
+
+            df_final = saldo_compras_alto.merge(passivos_compra, left_index=True, right_index=True, how="inner")
+
+            for idx, row in df_final.iterrows():
+                print(f"Player: {idx} | Saldo: {row['saldo']} | Lotes Comprados: {row['Quantidade']}")
+
+
+           # print (resultado_compras)         
             
 
 
