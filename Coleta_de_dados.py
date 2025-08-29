@@ -1,9 +1,17 @@
 import pandas as pd
 import winsound
 import time
-
 ARQUIVO = r'C:\Temp\DAY_TRADE.xlsm'
 ABA = 'Planilha1'
+
+# ADEQUAÇÃO PARAMETROS
+SALDO_COMPRAS = 1100
+SALDO_VENDAS  =- 300   # VALOR SEMPRE NEGATIVO 
+MIN_PASSIVO_COMPRA = 500
+MIN_PASIVO_VENDA = 1059
+
+
+
 
 class Gerenciador_excel:
     def __init__(self, caminho, aba):
@@ -45,8 +53,8 @@ if __name__ == '__main__':
             saldo["saldo"] = saldo["compras"] - saldo["vendas"]
 
             # DEFINO SALDO TOTAL CONSIDERANDO COMPRA E VENDA 
-            saldo_compras_alto = saldo[saldo["saldo"]> 200]
-            saldo_vendas_alto = saldo[saldo["saldo"] < -100]
+            saldo_compras_alto = saldo[saldo["saldo"]> SALDO_COMPRAS]    
+            saldo_vendas_alto = saldo[saldo["saldo"] < SALDO_VENDAS]
             
             # SEPARO OS AGRESSORES POR CATEGORIAS COMPRADOR OU AGRESSOR
             df_comprador = df[df["Agressor"] == "Vendedor"]
@@ -66,22 +74,26 @@ if __name__ == '__main__':
                 .rename(columns={"Quantidade": "compras"})
             )
            
-            #Define COMPRADOR PASSIVO - ABOSORÇÃO DA VENDA
+            #Define COMPRA PASSIVA 
             passivos_compra = df_comprador.groupby("Compradora")[["Quantidade"]].sum()
-            passivos_compra = passivos_compra[passivos_compra["Quantidade"] > 818]
+            passivos_compra = passivos_compra[passivos_compra["Quantidade"] > MIN_PASSIVO_COMPRA]
             df_final = saldo_compras_alto.merge(passivos_compra, left_index=True, right_index=True, how="inner")
+            
+            print(f'COMPRA PASSIVA {df['Data'].iloc[0]} --- {df['Valor'].iloc[0]}')
+            winsound.Beep(500, 500)
             for idx, row in df_final.iterrows():
-                print(f"Player: {idx} | Saldo: {row['saldo']} | Lotes Comprados: {row['Quantidade']}")
-
-            #Define COMPRADOR PASSIVO - ABOSORÇÃO DA VENDA
+                print(f"{idx} | Saldo: {row['saldo']} | Comp: {row['Quantidade']}")
+            print ()
+            
+            #Define VENDA PASSIVA
             passivos_venda = df_vendedor.groupby("Vendedora")[["Quantidade"]].sum()
-            passivos_venda = passivos_venda[passivos_venda["Quantidade"] > 500]
+            passivos_venda = passivos_venda[passivos_venda["Quantidade"] > MIN_PASIVO_VENDA]
             df_final = saldo_vendas_alto.merge(passivos_venda, left_index=True, right_index=True, how="inner")
+           
+            print(f'VENDA PASSIVA {df['Data'].iloc[0]} --- {df['Valor'].iloc[0]}')
+            winsound.Beep(1000, 300)
             for idx, row in df_final.iterrows():
-                print(f"Player: {idx} | Saldo: {row['saldo']} | Lotes Vendidos: {row['Quantidade']}")
-
-
-
+                print(f"{idx} | Saldo: {row['saldo']} | Vend: {row['Quantidade']}")
 
 
 
