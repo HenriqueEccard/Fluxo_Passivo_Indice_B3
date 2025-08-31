@@ -46,11 +46,13 @@ Este projeto é um **script em Python** desenvolvido para monitorar **Times & Tr
 ## 🚀 Como usar
 
 1. Clonar o repositório ou baixar os arquivos.
-2. Configurar o caminho da planilha Excel na variável `ARQUIVO` e o nome da aba em `ABA`.
-3. Ajustar os parâmetros de análise:
+2. Sincronizar via RTD a planilha com a ferramenta Profit Pro. 
+3. Configurar o caminho da planilha Excel na variável `ARQUIVO` e o nome da aba em `ABA`.
+4. Ajustar os parâmetros de análise:
    ```python
    SALDO_COMPRAS = 300
    SALDO_VENDAS  = -300
    MIN_PASSIVO_COMPRA = 500
    MIN_PASIVO_VENDA = 500
    temp_avalicao = 10
+   
