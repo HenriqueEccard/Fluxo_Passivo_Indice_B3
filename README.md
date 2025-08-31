@@ -1,0 +1,1 @@
+# Programa de coleta e análise de dados de fluxo no ativo mini índice com Profit Pro --- Em desenvolvimento ainda --- 
