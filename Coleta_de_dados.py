@@ -5,10 +5,11 @@ ARQUIVO = r'C:\Temp\DAY_TRADE.xlsm'
 ABA = 'Planilha1'
 
 # ADEQUAÇÃO PARAMETROS
-SALDO_COMPRAS = 1100
-SALDO_VENDAS  =- 300   # VALOR SEMPRE NEGATIVO 
+SALDO_COMPRAS = 600
+SALDO_VENDAS  =- 600   # VALOR SEMPRE NEGATIVO 
 MIN_PASSIVO_COMPRA = 500
-MIN_PASIVO_VENDA = 1059
+MIN_PASIVO_VENDA = 500
+temp_avalicao = 20
 
 
 
@@ -79,21 +80,27 @@ if __name__ == '__main__':
             passivos_compra = passivos_compra[passivos_compra["Quantidade"] > MIN_PASSIVO_COMPRA]
             df_final = saldo_compras_alto.merge(passivos_compra, left_index=True, right_index=True, how="inner")
             
-            print(f'COMPRA PASSIVA {df['Data'].iloc[0]} --- {df['Valor'].iloc[0]}')
-            winsound.Beep(500, 500)
+            #COMPRA
             for idx, row in df_final.iterrows():
-                print(f"{idx} | Saldo: {row['saldo']} | Comp: {row['Quantidade']}")
-            print ()
+                #print(f'COMPRA PASSIVA {df['Data'].iloc[0]} --- {df['Valor'].iloc[0]}')
+                winsound.Beep(1000, 300)
+                print()
+                print(f"{idx} | Saldo: {row['saldo']} | COMPRA: {row['Quantidade']} - {df['Valor'].iloc[0]}")
+                
+            #print ()
             
             #Define VENDA PASSIVA
             passivos_venda = df_vendedor.groupby("Vendedora")[["Quantidade"]].sum()
             passivos_venda = passivos_venda[passivos_venda["Quantidade"] > MIN_PASIVO_VENDA]
             df_final = saldo_vendas_alto.merge(passivos_venda, left_index=True, right_index=True, how="inner")
            
-            print(f'VENDA PASSIVA {df['Data'].iloc[0]} --- {df['Valor'].iloc[0]}')
-            winsound.Beep(1000, 300)
+            #print(f'VENDA PASSIVA {df['Data'].iloc[0]} --- {df['Valor'].iloc[0]}')
+            
             for idx, row in df_final.iterrows():
-                print(f"{idx} | Saldo: {row['saldo']} | Vend: {row['Quantidade']}")
+                print(f'VENDA PASSIVA {df['Data'].iloc[0]} --- {df['Valor'].iloc[0]}')
+                winsound.Beep(500, 300)
+                print()
+                print(f"{idx} | Saldo: {row['saldo']} | VENDA: {row['Quantidade']} - {df['Valor'].iloc[0]}")
 
 
 
@@ -101,4 +108,4 @@ if __name__ == '__main__':
             
 
 
-        time.sleep(3)
+        time.sleep(temp_avalicao)
